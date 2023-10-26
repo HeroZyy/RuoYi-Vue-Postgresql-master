@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bProductMapper">
+    
+    <resultMap type="B2bProduct" id="B2bProductResult">
+        <result property="sid"    column="sid"    />
+        <result property="classId"    column="class_id"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="prodName"    column="prod_name"    />
+        <result property="intro"    column="intro"    />
+        <result property="config"    column="config"    />
+    </resultMap>
+
+    <sql id="selectB2bProductVo">
+        select sid, class_id, shop_id, prod_name, intro, config from b2b_product
+    </sql>
+
+    <select id="selectB2bProductList" parameterType="B2bProduct" resultMap="B2bProductResult">
+        <include refid="selectB2bProductVo"/>
+        <where>  
+            <if test="sid != null "> and sid = #{sid}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="prodName != null  and prodName != ''"> and prod_name like concat('%', #{prodName}, '%')</if>
+            <if test="intro != null  and intro != ''"> and intro = #{intro}</if>
+            <if test="config != null  and config != ''"> and config = #{config}</if>
+        </where>
+    </select>
+    
+    <select id="selectB2bProductBySid" parameterType="Long" resultMap="B2bProductResult">
+        <include refid="selectB2bProductVo"/>
+        where sid = #{sid}
+    </select>
+        
+    <insert id="insertB2bProduct" parameterType="B2bProduct">
+        insert into b2b_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="shopId != null">shop_id,</if>
+            <if test="prodName != null and prodName != ''">prod_name,</if>
+            <if test="intro != null">intro,</if>
+            <if test="config != null">config,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="prodName != null and prodName != ''">#{prodName},</if>
+            <if test="intro != null">#{intro},</if>
+            <if test="config != null">#{config},</if>
+         </trim>
+    </insert>
+
+    <update id="updateB2bProduct" parameterType="B2bProduct">
+        update b2b_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="prodName != null and prodName != ''">prod_name = #{prodName},</if>
+            <if test="intro != null">intro = #{intro},</if>
+            <if test="config != null">config = #{config},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bProductBySid" parameterType="Long">
+        delete from b2b_product where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bProductBySids" parameterType="String">
+        delete from b2b_product where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

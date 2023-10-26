@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bProductDownloadMapper">
+    
+    <resultMap type="B2bProductDownload" id="B2bProductDownloadResult">
+        <result property="sid"    column="sid"    />
+        <result property="prodId"    column="prod_id"    />
+        <result property="url"    column="url"    />
+        <result property="allowDl"    column="allow_dl"    />
+    </resultMap>
+
+    <sql id="selectB2bProductDownloadVo">
+        select sid, prod_id, url, allow_dl from b2b_product_download
+    </sql>
+
+    <select id="selectB2bProductDownloadList" parameterType="B2bProductDownload" resultMap="B2bProductDownloadResult">
+        <include refid="selectB2bProductDownloadVo"/>
+        <where>  
+            <if test="sid != null "> and sid = #{sid}</if>
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="allowDl != null "> and allow_dl = #{allowDl}</if>
+        </where>
+    </select>
+    
+    <select id="selectB2bProductDownloadBySid" parameterType="Long" resultMap="B2bProductDownloadResult">
+        <include refid="selectB2bProductDownloadVo"/>
+        where sid = #{sid}
+    </select>
+        
+    <insert id="insertB2bProductDownload" parameterType="B2bProductDownload">
+        insert into b2b_product_download
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="prodId != null">prod_id,</if>
+            <if test="url != null">url,</if>
+            <if test="allowDl != null">allow_dl,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="prodId != null">#{prodId},</if>
+            <if test="url != null">#{url},</if>
+            <if test="allowDl != null">#{allowDl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateB2bProductDownload" parameterType="B2bProductDownload">
+        update b2b_product_download
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="prodId != null">prod_id = #{prodId},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="allowDl != null">allow_dl = #{allowDl},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bProductDownloadBySid" parameterType="Long">
+        delete from b2b_product_download where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bProductDownloadBySids" parameterType="String">
+        delete from b2b_product_download where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

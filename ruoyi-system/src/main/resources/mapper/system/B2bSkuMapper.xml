@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bSkuMapper">
+    
+    <resultMap type="B2bSku" id="B2bSkuResult">
+        <result property="sid"    column="sid"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="skuName"    column="sku_name"    />
+        <result property="price"    column="price"    />
+        <result property="describe"    column="describe"    />
+        <result property="defaultSku"    column="default_sku"    />
+        <result property="prodId"    column="prod_id"    />
+    </resultMap>
+
+    <sql id="selectB2bSkuVo">
+        select sid, sku_id, sku_name, price, describe, default_sku, prod_id from b2b_sku
+    </sql>
+
+    <select id="selectB2bSkuList" parameterType="B2bSku" resultMap="B2bSkuResult">
+        <include refid="selectB2bSkuVo"/>
+        <where>  
+            <if test="sid != null "> and sid = #{sid}</if>
+            <if test="skuId != null "> and sku_id = #{skuId}</if>
+            <if test="skuName != null  and skuName != ''"> and sku_name like concat('%', #{skuName}, '%')</if>
+            <if test="price != null  and price != ''"> and price = #{price}</if>
+            <if test="describe != null  and describe != ''"> and describe = #{describe}</if>
+            <if test="defaultSku != null "> and default_sku = #{defaultSku}</if>
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+        </where>
+    </select>
+    
+    <select id="selectB2bSkuBySid" parameterType="Long" resultMap="B2bSkuResult">
+        <include refid="selectB2bSkuVo"/>
+        where sid = #{sid}
+    </select>
+        
+    <insert id="insertB2bSku" parameterType="B2bSku">
+        insert into b2b_sku
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="skuId != null">sku_id,</if>
+            <if test="skuName != null and skuName != ''">sku_name,</if>
+            <if test="price != null and price != ''">price,</if>
+            <if test="describe != null and describe != ''">describe,</if>
+            <if test="defaultSku != null">default_sku,</if>
+            <if test="prodId != null">prod_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="skuId != null">#{skuId},</if>
+            <if test="skuName != null and skuName != ''">#{skuName},</if>
+            <if test="price != null and price != ''">#{price},</if>
+            <if test="describe != null and describe != ''">#{describe},</if>
+            <if test="defaultSku != null">#{defaultSku},</if>
+            <if test="prodId != null">#{prodId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateB2bSku" parameterType="B2bSku">
+        update b2b_sku
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="skuId != null">sku_id = #{skuId},</if>
+            <if test="skuName != null and skuName != ''">sku_name = #{skuName},</if>
+            <if test="price != null and price != ''">price = #{price},</if>
+            <if test="describe != null and describe != ''">describe = #{describe},</if>
+            <if test="defaultSku != null">default_sku = #{defaultSku},</if>
+            <if test="prodId != null">prod_id = #{prodId},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bSkuBySid" parameterType="Long">
+        delete from b2b_sku where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bSkuBySids" parameterType="String">
+        delete from b2b_sku where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>
