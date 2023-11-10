@@ -111,7 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 过滤请求
                 .authorizeRequests()
                 // 对于登录login 注册register 验证码captchaImage 判断手机号是否存在ifPhoneExist 允许匿名访问
-                .antMatchers("/system/user/profile/resetPhonePwd","/sys/user/register/submitPhoneAndCode","/system/user/login/captchaImage","/system/user/login/login","/sys/user/register/register","/sys/user/register/getCode","/system/user/profile/findPwdCode","/login", "/register", "/captchaImage","/getCode").permitAll()
+                .antMatchers("/system/user/profile/codeUpdatePwd","/system/down/download/**","/system/user/register/**","/system/scprelation/**","/system/product/getDetailInfoByClassIdAndProductId","/system/recommendrel/redWord","/system/product/selectProductDetailByProductId","/system/scene/list","/system/class/list","/system/product/list","/system/user/profile/resetPhonePwd","/system/user/register/submitPhoneAndCode","/system/user/login/captchaImage","/system/user/login/login","/system/user/register/register","/system/user/register/getCode","/system/user/profile/findPwdCode","/login", "/register", "/captchaImage","/getCode").permitAll()
                 // 静态资源，可匿名访问
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
                 .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()

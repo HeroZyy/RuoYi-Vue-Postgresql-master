@@ -11,13 +11,26 @@ import com.ruoyi.system.service.IB2bSkuService;
  * 产品单元Service业务层处理
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 @Service
 public class B2bSkuServiceImpl implements IB2bSkuService 
 {
     @Autowired
     private B2bSkuMapper b2bSkuMapper;
+
+    /**
+     * 根据prod_id查询产品单元列表
+     *
+     * @param prod_id 产品单元主键
+     * @return 产品单元列表
+     */
+    @Override
+    public List<B2bSku> selectListB2bSkuBySid(Long prod_id){
+        B2bSku b2bSku = new B2bSku();
+        b2bSku.setSid(prod_id);
+        return b2bSkuMapper.selectB2bSkuList(b2bSku);
+    }
 
     /**
      * 查询产品单元

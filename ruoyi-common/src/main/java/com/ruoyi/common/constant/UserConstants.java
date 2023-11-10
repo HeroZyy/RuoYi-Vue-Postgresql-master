@@ -17,7 +17,7 @@ public class UserConstants
     /**
      * 验证码过期时间
      */
-    public static final int CODE_TIME_OUT = 1;
+    public static final int CODE_TIME_OUT = 10;
     /**
      * 平台内系统用户的唯一标志
      */

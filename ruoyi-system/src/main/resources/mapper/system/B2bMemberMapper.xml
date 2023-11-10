@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bMemberMapper">
+    
+    <resultMap type="B2bMember" id="B2bMemberResult">
+        <result property="sid"    column="sid"    />
+        <result property="sex"    column="sex"    />
+        <result property="realname"    column="realname"    />
+        <result property="phone"    column="phone"    />
+        <result property="company"    column="company"    />
+        <result property="addr"    column="addr"    />
+        <result property="memberType"    column="member_type"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="avator"    column="avator"    />
+        <result property="email"    column="email"    />
+        <result property="job"    column="job"    />
+    </resultMap>
+
+    <sql id="selectB2bMemberVo">
+        select sid, sex, realname, phone, company, addr, member_type, shop_id, avator, email, job from b2b_member
+    </sql>
+
+    <select id="selectB2bMemberList" parameterType="B2bMember" resultMap="B2bMemberResult">
+        <include refid="selectB2bMemberVo"/>
+        <where>  
+            <if test="sex != null "> and sex = #{sex}</if>
+            <if test="realname != null  and realname != ''"> and realname like concat('%', #{realname}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+            <if test="addr != null  and addr != ''"> and addr = #{addr}</if>
+            <if test="memberType != null "> and member_type = #{memberType}</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="avator != null  and avator != ''"> and avator = #{avator}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="job != null  and job != ''"> and job = #{job}</if>
+        </where>
+    </select>
+    
+    <select id="selectB2bMemberBySid" parameterType="Long" resultMap="B2bMemberResult">
+        <include refid="selectB2bMemberVo"/>
+        where sid = #{sid}
+    </select>
+        
+    <insert id="insertB2bMember" parameterType="B2bMember">
+        insert into b2b_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="sex != null">sex,</if>
+            <if test="realname != null and realname != ''">realname,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="company != null">company,</if>
+            <if test="addr != null">addr,</if>
+            <if test="memberType != null">member_type,</if>
+            <if test="shopId != null">shop_id,</if>
+            <if test="avator != null">avator,</if>
+            <if test="email != null">email,</if>
+            <if test="job != null">job,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="realname != null and realname != ''">#{realname},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="company != null">#{company},</if>
+            <if test="addr != null">#{addr},</if>
+            <if test="memberType != null">#{memberType},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="avator != null">#{avator},</if>
+            <if test="email != null">#{email},</if>
+            <if test="job != null">#{job},</if>
+         </trim>
+    </insert>
+
+    <update id="updateB2bMember" parameterType="B2bMember">
+        update b2b_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="realname != null and realname != ''">realname = #{realname},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="addr != null">addr = #{addr},</if>
+            <if test="memberType != null">member_type = #{memberType},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="avator != null">avator = #{avator},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="job != null">job = #{job},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bMemberBySid" parameterType="Long">
+        delete from b2b_member where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bMemberBySids" parameterType="String">
+        delete from b2b_member where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

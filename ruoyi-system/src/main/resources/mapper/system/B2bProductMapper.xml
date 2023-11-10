@@ -20,7 +20,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectB2bProductList" parameterType="B2bProduct" resultMap="B2bProductResult">
         <include refid="selectB2bProductVo"/>
         <where>  
-            <if test="sid != null "> and sid = #{sid}</if>
             <if test="classId != null "> and class_id = #{classId}</if>
             <if test="shopId != null "> and shop_id = #{shopId}</if>
             <if test="prodName != null  and prodName != ''"> and prod_name like concat('%', #{prodName}, '%')</if>

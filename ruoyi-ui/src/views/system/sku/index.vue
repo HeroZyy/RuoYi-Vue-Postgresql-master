@@ -1,42 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="自增主键" prop="sid">
-        <el-input
-          v-model="queryParams.sid"
-          placeholder="请输入自增主键"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="产品sku的id" prop="skuId">
         <el-input
           v-model="queryParams.skuId"
           placeholder="请输入产品sku的id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="产品sku名称" prop="skuName">
-        <el-input
-          v-model="queryParams.skuName"
-          placeholder="请输入产品sku名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="产品sku价格" prop="price">
-        <el-input
-          v-model="queryParams.price"
-          placeholder="请输入产品sku价格"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="产品sku描述" prop="describe">
-        <el-input
-          v-model="queryParams.describe"
-          placeholder="请输入产品sku描述"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -149,20 +117,8 @@
     <!-- 添加或修改产品单元对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="自增主键" prop="sid">
-          <el-input v-model="form.sid" placeholder="请输入自增主键" />
-        </el-form-item>
         <el-form-item label="产品sku的id" prop="skuId">
           <el-input v-model="form.skuId" placeholder="请输入产品sku的id" />
-        </el-form-item>
-        <el-form-item label="产品sku名称" prop="skuName">
-          <el-input v-model="form.skuName" placeholder="请输入产品sku名称" />
-        </el-form-item>
-        <el-form-item label="产品sku价格" prop="price">
-          <el-input v-model="form.price" placeholder="请输入产品sku价格" />
-        </el-form-item>
-        <el-form-item label="产品sku描述" prop="describe">
-          <el-input v-model="form.describe" placeholder="请输入产品sku描述" />
         </el-form-item>
         <el-form-item label="是否为该产品id下的默认sku" prop="defaultSku">
           <el-input v-model="form.defaultSku" placeholder="请输入是否为该产品id下的默认sku" />
@@ -208,7 +164,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        sid: null,
         skuId: null,
         skuName: null,
         price: null,
@@ -220,9 +175,6 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        sid: [
-          { required: true, message: "自增主键不能为空", trigger: "blur" }
-        ],
         skuId: [
           { required: true, message: "产品sku的id不能为空", trigger: "blur" }
         ],

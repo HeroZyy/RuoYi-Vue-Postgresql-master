@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bRecrelationMapper">
+    
+    <resultMap type="B2bRecrelation" id="B2bRecrelationResult">
+        <result property="sid"    column="sid"    />
+        <result property="recId"    column="rec_id"    />
+        <result property="prodId"    column="prod_id"    />
+        <result property="orderId"    column="order_id"    />
+    </resultMap>
+
+    <sql id="selectB2bRecrelationVo">
+        select sid, rec_id, prod_id, order_id from b2b_recRelation
+    </sql>
+
+    <select id="selectB2bRecrelationList" parameterType="B2bRecrelation" resultMap="B2bRecrelationResult">
+        <include refid="selectB2bRecrelationVo"/>
+        <where>  
+            <if test="recId != null "> and rec_id = #{recId}</if>
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+        </where>
+    </select>
+    
+    <select id="selectB2bRecrelationBySid" parameterType="Long" resultMap="B2bRecrelationResult">
+        <include refid="selectB2bRecrelationVo"/>
+        where sid = #{sid}
+    </select>
+        
+    <insert id="insertB2bRecrelation" parameterType="B2bRecrelation">
+        insert into b2b_recRelation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="recId != null">rec_id,</if>
+            <if test="prodId != null">prod_id,</if>
+            <if test="orderId != null">order_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="recId != null">#{recId},</if>
+            <if test="prodId != null">#{prodId},</if>
+            <if test="orderId != null">#{orderId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateB2bRecrelation" parameterType="B2bRecrelation">
+        update b2b_recRelation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recId != null">rec_id = #{recId},</if>
+            <if test="prodId != null">prod_id = #{prodId},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bRecrelationBySid" parameterType="Long">
+        delete from b2b_recRelation where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bRecrelationBySids" parameterType="String">
+        delete from b2b_recRelation where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

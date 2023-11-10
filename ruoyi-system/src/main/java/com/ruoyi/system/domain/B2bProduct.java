@@ -5,18 +5,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.util.Objects;
+
 /**
  * 产品基本信息对象 b2b_product
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 public class B2bProduct extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 产品id */
-    @Excel(name = "产品id")
     private Long sid;
 
     /** 产品分类id */
@@ -104,5 +105,18 @@ public class B2bProduct extends BaseEntity
             .append("intro", getIntro())
             .append("config", getConfig())
             .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        B2bProduct that = (B2bProduct) o;
+        return Objects.equals(sid, that.sid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sid);
     }
 }

@@ -18,7 +18,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectB2bProductDownloadList" parameterType="B2bProductDownload" resultMap="B2bProductDownloadResult">
         <include refid="selectB2bProductDownloadVo"/>
         <where>  
-            <if test="sid != null "> and sid = #{sid}</if>
             <if test="prodId != null "> and prod_id = #{prodId}</if>
             <if test="url != null  and url != ''"> and url = #{url}</if>
             <if test="allowDl != null "> and allow_dl = #{allowDl}</if>

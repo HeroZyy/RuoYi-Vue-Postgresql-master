@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="下载表自增主键" prop="sid">
-        <el-input
-          v-model="queryParams.sid"
-          placeholder="请输入下载表自增主键"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="产品id" prop="prodId">
         <el-input
           v-model="queryParams.prodId"
@@ -122,9 +114,6 @@
     <!-- 添加或修改产品资料下载信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="下载表自增主键" prop="sid">
-          <el-input v-model="form.sid" placeholder="请输入下载表自增主键" />
-        </el-form-item>
         <el-form-item label="产品id" prop="prodId">
           <el-input v-model="form.prodId" placeholder="请输入产品id" />
         </el-form-item>
@@ -172,7 +161,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        sid: null,
         prodId: null,
         url: null,
         allowDl: null
@@ -181,9 +169,6 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        sid: [
-          { required: true, message: "下载表自增主键不能为空", trigger: "blur" }
-        ],
       }
     };
   },

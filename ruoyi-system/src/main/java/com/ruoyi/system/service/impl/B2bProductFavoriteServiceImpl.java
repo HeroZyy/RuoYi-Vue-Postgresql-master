@@ -11,7 +11,7 @@ import com.ruoyi.system.service.IB2bProductFavoriteService;
  * 产品收藏Service业务层处理
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 @Service
 public class B2bProductFavoriteServiceImpl implements IB2bProductFavoriteService 

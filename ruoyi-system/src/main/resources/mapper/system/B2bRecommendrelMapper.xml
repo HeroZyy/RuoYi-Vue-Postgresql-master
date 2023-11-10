@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bRecommendrelMapper">
+    
+    <resultMap type="B2bRecommendrel" id="B2bRecommendrelResult">
+        <result property="sid"    column="sid"    />
+        <result property="recId"    column="rec_id"    />
+        <result property="prodId"    column="prod_id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="classId"    column="class_id"    />
+        <result property="sceneId"    column="scene_id"    />
+    </resultMap>
+
+    <sql id="selectB2bRecommendrelVo">
+        select sid, rec_id, prod_id, order_id, class_id, scene_id from b2b_recommendrel
+    </sql>
+
+    <select id="selectB2bRecommendrelList" parameterType="B2bRecommendrel" resultMap="B2bRecommendrelResult">
+        <include refid="selectB2bRecommendrelVo"/>
+        <where>  
+            <if test="recId != null "> and rec_id = #{recId}</if>
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="sceneId != null "> and scene_id = #{sceneId}</if>
+        </where>
+        ORDER BY order_id
+    </select>
+    
+    <select id="selectB2bRecommendrelBySid" parameterType="Long" resultMap="B2bRecommendrelResult">
+        <include refid="selectB2bRecommendrelVo"/>
+        where sid = #{sid} ORDER BY order_id
+    </select>
+        
+    <insert id="insertB2bRecommendrel" parameterType="B2bRecommendrel">
+        insert into b2b_recommendrel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="recId != null">rec_id,</if>
+            <if test="prodId != null">prod_id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="sceneId != null">scene_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="recId != null">#{recId},</if>
+            <if test="prodId != null">#{prodId},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="sceneId != null">#{sceneId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateB2bRecommendrel" parameterType="B2bRecommendrel">
+        update b2b_recommendrel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recId != null">rec_id = #{recId},</if>
+            <if test="prodId != null">prod_id = #{prodId},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="sceneId != null">scene_id = #{sceneId},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bRecommendrelBySid" parameterType="Long">
+        delete from b2b_recommendrel where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bRecommendrelBySids" parameterType="String">
+        delete from b2b_recommendrel where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import java.util.Set;
+
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.constant.Constants;
@@ -20,7 +23,7 @@ import com.ruoyi.system.service.ISysMenuService;
  * @author ruoyi
  */
 @RestController
-public class SysLoginController
+public class SysLoginController extends BaseController
 {
     @Autowired
     private SysLoginService loginService;
@@ -62,6 +65,13 @@ public class SysLoginController
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
                 loginBody.getUuid());
         ajax.put(Constants.TOKEN, token);
+        try{
+            LoginUser loginUser = SecurityUtils.getLoginUser();
+            loginUser.setPermissions(permissionService.getMenuPermission(loginUser.getUser()));
+        }
+        catch (Exception ignore){
+
+        }
         return ajax;
     }
 

@@ -7,7 +7,7 @@ import com.ruoyi.system.domain.B2bProductFavorite;
  * 产品收藏Mapper接口
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 public interface B2bProductFavoriteMapper 
 {

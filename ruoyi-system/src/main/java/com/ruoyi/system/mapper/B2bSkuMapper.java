@@ -7,7 +7,7 @@ import com.ruoyi.system.domain.B2bSku;
  * 产品单元Mapper接口
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-11-07
  */
 public interface B2bSkuMapper 
 {

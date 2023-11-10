@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bScprelationMapper">
+    
+    <resultMap type="B2bScprelation" id="B2bScprelationResult">
+        <result property="sid"    column="sid"    />
+        <result property="sceneId"    column="scene_id"    />
+        <result property="classId"    column="class_id"    />
+        <result property="prodId"    column="prod_id"    />
+    </resultMap>
+
+    <sql id="selectB2bScprelationVo">
+        select sid, scene_id, class_id, prod_id from b2b_scprelation
+    </sql>
+
+    <select id="selectB2bScprelationList" parameterType="B2bScprelation" resultMap="B2bScprelationResult">
+        <include refid="selectB2bScprelationVo"/>
+        <where>  
+            <if test="sceneId != null "> and scene_id = #{sceneId}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+        </where>
+    </select>
+
+    <select id="selectB2bScprelationBySceneSidAndClassSid" resultMap="B2bScprelationResult">
+        <include refid="selectB2bScprelationVo"/>
+        <where>
+            <if test="sceneId != null "> and scene_id = #{sceneId}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+        </where>
+    </select>
+
+    <select id="selectB2bScprelationBySceneSid" parameterType="Long" resultMap="B2bScprelationResult">
+        <include refid="selectB2bScprelationVo"/>
+        <where>
+            <if test="sceneId != null "> and scene_id = #{sceneId}</if>
+        </where>
+    </select>
+
+    <select id="selectB2bScprelationByClassSid" parameterType="Long" resultMap="B2bScprelationResult">
+        <include refid="selectB2bScprelationVo"/>
+        <where>
+            <if test="classId != null "> and class_id = #{classId}</if>
+        </where>
+    </select>
+
+    <select id="selectB2bScprelationBySid" parameterType="Long" resultMap="B2bScprelationResult">
+        <include refid="selectB2bScprelationVo"/>
+        where sid = #{sid}
+    </select>
+        
+    <insert id="insertB2bScprelation" parameterType="B2bScprelation">
+        insert into b2b_scprelation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="sceneId != null">scene_id,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="prodId != null">prod_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="sceneId != null">#{sceneId},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="prodId != null">#{prodId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateB2bScprelation" parameterType="B2bScprelation">
+        update b2b_scprelation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sceneId != null">scene_id = #{sceneId},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="prodId != null">prod_id = #{prodId},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bScprelationBySid" parameterType="Long">
+        delete from b2b_scprelation where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bScprelationBySids" parameterType="String">
+        delete from b2b_scprelation where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

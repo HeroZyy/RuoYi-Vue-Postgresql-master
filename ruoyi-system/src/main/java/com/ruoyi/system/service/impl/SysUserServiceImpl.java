@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.validation.Validator;
 
 import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.utils.SendMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,12 +70,13 @@ public class SysUserServiceImpl implements ISysUserService
     private RedisCache redisCache;
 
     @Override
-    public String resPhoneCode(String phonenumber) {
+    public String resPhoneCode(String func ,String phonenumber) {
         Random random = new Random();
         int randomInt = random.nextInt(10000);
         String result = String.format("%04d", randomInt);
         redisCache.setCacheObject(phonenumber,result,UserConstants.CODE_TIME_OUT, TimeUnit.MINUTES);
-
+        SendMsg sendMsg = new SendMsg();
+        sendMsg.Send(func,phonenumber,Integer.parseInt(result));
         //要形成电话和验证码的映射，后续对比验证码和电话
         return result;
     }

@@ -18,7 +18,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectB2bProductFavoriteList" parameterType="B2bProductFavorite" resultMap="B2bProductFavoriteResult">
         <include refid="selectB2bProductFavoriteVo"/>
         <where>  
-            <if test="sid != null "> and sid = #{sid}</if>
             <if test="memId != null "> and mem_id = #{memId}</if>
             <if test="skuId != null "> and sku_id = #{skuId}</if>
             <if test="prodId != null "> and prod_id = #{prodId}</if>

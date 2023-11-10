@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bDevDetailedlistMapper">
+
+    <resultMap type="B2bDevDetailedlist" id="B2bDevDetailedlistResult">
+        <result property="sid"    column="sid"    />
+        <result property="devName"    column="dev_name"    />
+        <result property="devType"    column="dev_type"    />
+        <result property="devBrand"    column="dev_brand"    />
+        <result property="devConfig"    column="dev_config"    />
+        <result property="devUnits"    column="dev_units"    />
+        <result property="devNum"    column="dev_num"    />
+        <result property="devPerprice"    column="dev_perprice"    />
+        <result property="devTotalprice"    column="dev_totalprice"    />
+        <result property="devRemark"    column="dev_remark"    />
+        <result property="productId"    column="product_id"    />
+        <result property="devTypename"    column="dev_typename"    />
+        <result property="devId"    column="dev_id"    />
+    </resultMap>
+
+    <sql id="selectB2bDevDetailedlistVo">
+        select sid, dev_name, dev_type, dev_brand, dev_config, dev_units, dev_num, dev_perprice, dev_totalprice, dev_remark, product_id, dev_typename, dev_id from b2b_dev_detailedlist
+    </sql>
+
+    <select id="selectB2bDevDetailedlistList" parameterType="B2bDevDetailedlist" resultMap="B2bDevDetailedlistResult">
+        <include refid="selectB2bDevDetailedlistVo"/>
+        <where>
+            <if test="devName != null  and devName != ''"> and dev_name like concat('%', #{devName}, '%')</if>
+            <if test="devType != null "> and dev_type = #{devType}</if>
+            <if test="devBrand != null  and devBrand != ''"> and dev_brand = #{devBrand}</if>
+            <if test="devConfig != null  and devConfig != ''"> and dev_config = #{devConfig}</if>
+            <if test="devUnits != null  and devUnits != ''"> and dev_units = #{devUnits}</if>
+            <if test="devNum != null  and devNum != ''"> and dev_num = #{devNum}</if>
+            <if test="devPerprice != null  and devPerprice != ''"> and dev_perprice = #{devPerprice}</if>
+            <if test="devTotalprice != null  and devTotalprice != ''"> and dev_totalprice = #{devTotalprice}</if>
+            <if test="devRemark != null  and devRemark != ''"> and dev_remark = #{devRemark}</if>
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="devTypename != null  and devTypename != ''"> and dev_typename like concat('%', #{devTypename}, '%')</if>
+            <if test="devId != null "> and dev_id = #{devId}</if>
+        </where>
+    </select>
+
+    <select id="selectB2bDevDetailedlistBySid" parameterType="Long" resultMap="B2bDevDetailedlistResult">
+    </select>
+
+    <insert id="insertB2bDevDetailedlist" parameterType="B2bDevDetailedlist">
+        insert into b2b_dev_detailedlist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="devName != null">dev_name,</if>
+            <if test="devType != null">dev_type,</if>
+            <if test="devBrand != null">dev_brand,</if>
+            <if test="devConfig != null">dev_config,</if>
+            <if test="devUnits != null">dev_units,</if>
+            <if test="devNum != null">dev_num,</if>
+            <if test="devPerprice != null">dev_perprice,</if>
+            <if test="devTotalprice != null">dev_totalprice,</if>
+            <if test="devRemark != null">dev_remark,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="devTypename != null">dev_typename,</if>
+            <if test="devId != null">dev_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="devName != null">#{devName},</if>
+            <if test="devType != null">#{devType},</if>
+            <if test="devBrand != null">#{devBrand},</if>
+            <if test="devConfig != null">#{devConfig},</if>
+            <if test="devUnits != null">#{devUnits},</if>
+            <if test="devNum != null">#{devNum},</if>
+            <if test="devPerprice != null">#{devPerprice},</if>
+            <if test="devTotalprice != null">#{devTotalprice},</if>
+            <if test="devRemark != null">#{devRemark},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="devTypename != null">#{devTypename},</if>
+            <if test="devId != null">#{devId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateB2bDevDetailedlist" parameterType="B2bDevDetailedlist">
+        update b2b_dev_detailedlist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="devName != null">dev_name = #{devName},</if>
+            <if test="devType != null">dev_type = #{devType},</if>
+            <if test="devBrand != null">dev_brand = #{devBrand},</if>
+            <if test="devConfig != null">dev_config = #{devConfig},</if>
+            <if test="devUnits != null">dev_units = #{devUnits},</if>
+            <if test="devNum != null">dev_num = #{devNum},</if>
+            <if test="devPerprice != null">dev_perprice = #{devPerprice},</if>
+            <if test="devTotalprice != null">dev_totalprice = #{devTotalprice},</if>
+            <if test="devRemark != null">dev_remark = #{devRemark},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="devTypename != null">dev_typename = #{devTypename},</if>
+            <if test="devId != null">dev_id = #{devId},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bDevDetailedlistBySid" parameterType="Long">
+        delete from b2b_dev_detailedlist where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bDevDetailedlistBySids" parameterType="String">
+        delete from b2b_dev_detailedlist where sid in
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

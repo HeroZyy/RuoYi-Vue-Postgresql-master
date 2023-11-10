@@ -9,14 +9,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 产品资料下载信息对象 b2b_product_download
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 public class B2bProductDownload extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 下载表自增主键 */
-    @Excel(name = "下载表自增主键")
     private Long sid;
 
     /** 产品id */

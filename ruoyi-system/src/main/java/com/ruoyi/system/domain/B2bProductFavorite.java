@@ -9,14 +9,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 产品收藏对象 b2b_product_favorite
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 public class B2bProductFavorite extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 收藏表自增标号 */
-    @Excel(name = "收藏表自增标号")
     private Long sid;
 
     /** 会员id */

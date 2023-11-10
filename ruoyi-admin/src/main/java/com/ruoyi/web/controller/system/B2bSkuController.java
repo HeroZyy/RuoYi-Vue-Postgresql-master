@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 产品单元Controller
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 @RestController
 @RequestMapping("/system/sku")

@@ -15,7 +15,8 @@ public interface ISysUserService
      * @param phonenumber 用户手机号
      * @return 用户手机验证码
      */
-    public String resPhoneCode(String phonenumber);
+    public String resPhoneCode(String func , String phonenumber);
+
     /**
      * 手机号重置密码验证验证码是否正确
      *

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bProductDescMapper">
+
+    <resultMap type="B2bProductDesc" id="B2bProductDescResult">
+        <result property="sid"    column="sid"    />
+        <result property="describe"    column="describe"    />
+        <result property="msg1"    column="msg1"    />
+        <result property="msg2"    column="msg2"    />
+        <result property="msg3"    column="msg3"    />
+    </resultMap>
+
+    <sql id="selectB2bProductDescVo">
+        select sid, describe, msg1, msg2, msg3 from b2b_product_desc
+    </sql>
+
+    <select id="selectB2bProductDescList" parameterType="B2bProductDesc" resultMap="B2bProductDescResult">
+        <include refid="selectB2bProductDescVo"/>
+        <where>
+            <if test="describe != null  and describe != ''"> and describe = #{describe}</if>
+            <if test="msg1 != null  and msg1 != ''"> and msg1 = #{msg1}</if>
+            <if test="msg2 != null  and msg2 != ''"> and msg2 = #{msg2}</if>
+            <if test="msg3 != null  and msg3 != ''"> and msg3 = #{msg3}</if>
+        </where>
+    </select>
+
+    <select id="selectB2bProductDescBySid" parameterType="Long" resultMap="B2bProductDescResult">
+        <include refid="selectB2bProductDescVo"/>
+        where sid = #{sid}
+    </select>
+
+    <insert id="insertB2bProductDesc" parameterType="B2bProductDesc">
+        insert into b2b_product_desc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="describe != null">describe,</if>
+            <if test="msg1 != null">msg1,</if>
+            <if test="msg2 != null">msg2,</if>
+            <if test="msg3 != null">msg3,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="describe != null">#{describe},</if>
+            <if test="msg1 != null">#{msg1},</if>
+            <if test="msg2 != null">#{msg2},</if>
+            <if test="msg3 != null">#{msg3},</if>
+        </trim>
+    </insert>
+
+    <update id="updateB2bProductDesc" parameterType="B2bProductDesc">
+        update b2b_product_desc
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="describe != null">describe = #{describe},</if>
+            <if test="msg1 != null">msg1 = #{msg1},</if>
+            <if test="msg2 != null">msg2 = #{msg2},</if>
+            <if test="msg3 != null">msg3 = #{msg3},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bProductDescBySid" parameterType="Long">
+        delete from b2b_product_desc where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bProductDescBySids" parameterType="String">
+        delete from b2b_product_desc where sid in
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

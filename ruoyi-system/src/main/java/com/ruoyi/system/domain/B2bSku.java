@@ -1,22 +1,21 @@
 package com.ruoyi.system.domain;
 
+import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 产品单元对象 b2b_sku
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-11-07
  */
 public class B2bSku extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 自增主键 */
-    @Excel(name = "自增主键")
     private Long sid;
 
     /** 产品sku的id */
@@ -42,6 +41,10 @@ public class B2bSku extends BaseEntity
     /** 产品id */
     @Excel(name = "产品id")
     private Long prodId;
+
+    /** 产品sku标准报价清单 */
+    @Excel(name = "产品sku标准报价清单")
+    private String skuList;
 
     public void setSid(Long sid) 
     {
@@ -106,6 +109,15 @@ public class B2bSku extends BaseEntity
     {
         return prodId;
     }
+    public void setSkuList(String skuList) 
+    {
+        this.skuList = skuList;
+    }
+
+    public String getSkuList() 
+    {
+        return skuList;
+    }
 
     @Override
     public String toString() {
@@ -117,6 +129,8 @@ public class B2bSku extends BaseEntity
             .append("describe", getDescribe())
             .append("defaultSku", getDefaultSku())
             .append("prodId", getProdId())
+            .append("skuList", getSkuList())
+            .append("remark", getRemark())
             .toString();
     }
 }

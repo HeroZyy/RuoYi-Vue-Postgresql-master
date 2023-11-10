@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="收藏表自增标号" prop="sid">
-        <el-input
-          v-model="queryParams.sid"
-          placeholder="请输入收藏表自增标号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="会员id" prop="memId">
         <el-input
           v-model="queryParams.memId"
@@ -17,10 +9,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="收藏的sku_id" prop="skuId">
+      <el-form-item label="收藏的sku_id(-1表示默认)(-1表示默认)" prop="skuId">
         <el-input
           v-model="queryParams.skuId"
-          placeholder="请输入收藏的sku_id"
+          placeholder="请输入收藏的sku_id(-1表示默认)"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -89,7 +81,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="收藏表自增标号" align="center" prop="sid" />
       <el-table-column label="会员id" align="center" prop="memId" />
-      <el-table-column label="收藏的sku_id" align="center" prop="skuId" />
+      <el-table-column label="收藏的sku_id(-1表示默认)" align="center" prop="skuId" />
       <el-table-column label="产品的id" align="center" prop="prodId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -122,14 +114,11 @@
     <!-- 添加或修改产品收藏对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="收藏表自增标号" prop="sid">
-          <el-input v-model="form.sid" placeholder="请输入收藏表自增标号" />
-        </el-form-item>
         <el-form-item label="会员id" prop="memId">
           <el-input v-model="form.memId" placeholder="请输入会员id" />
         </el-form-item>
-        <el-form-item label="收藏的sku_id" prop="skuId">
-          <el-input v-model="form.skuId" placeholder="请输入收藏的sku_id" />
+        <el-form-item label="收藏的sku_id(-1表示默认)" prop="skuId">
+          <el-input v-model="form.skuId" placeholder="请输入收藏的sku_id(-1表示默认)" />
         </el-form-item>
         <el-form-item label="产品的id" prop="prodId">
           <el-input v-model="form.prodId" placeholder="请输入产品的id" />
@@ -172,7 +161,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        sid: null,
         memId: null,
         skuId: null,
         prodId: null
@@ -181,14 +169,11 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        sid: [
-          { required: true, message: "收藏表自增标号不能为空", trigger: "blur" }
-        ],
         memId: [
           { required: true, message: "会员id不能为空", trigger: "blur" }
         ],
         skuId: [
-          { required: true, message: "收藏的sku_id不能为空", trigger: "blur" }
+          { required: true, message: "收藏的sku_id(-1表示默认)不能为空", trigger: "blur" }
         ],
         prodId: [
           { required: true, message: "产品的id不能为空", trigger: "blur" }

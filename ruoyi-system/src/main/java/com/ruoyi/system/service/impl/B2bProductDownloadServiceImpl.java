@@ -11,7 +11,7 @@ import com.ruoyi.system.service.IB2bProductDownloadService;
  * 产品资料下载信息Service业务层处理
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 @Service
 public class B2bProductDownloadServiceImpl implements IB2bProductDownloadService 

@@ -90,6 +90,10 @@ public class SysUser extends BaseEntity
     /** 角色ID */
     private Long roleId;
 
+    /** 用户类型（00系统用户） */
+    @Excel(name = "用户类型", readConverterExp = "0=0系统用户")
+    private String userType;
+
     public SysUser()
     {
 
@@ -98,6 +102,36 @@ public class SysUser extends BaseEntity
     public SysUser(Long userId)
     {
         this.userId = userId;
+    }
+
+    public SysUser(Long userId, Long deptId, String userName, String nickName, String email, String phonenumber, String sex, String avatar, String password, String status, String delFlag, String loginIp, Date loginDate, SysDept dept, List<SysRole> roles, Long[] roleIds, Long[] postIds, Long roleId, String userType) {
+        this.userId = userId;
+        this.deptId = deptId;
+        this.userName = userName;
+        this.nickName = nickName;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.sex = sex;
+        this.avatar = avatar;
+        this.password = password;
+        this.status = status;
+        this.delFlag = delFlag;
+        this.loginIp = loginIp;
+        this.loginDate = loginDate;
+        this.dept = dept;
+        this.roles = roles;
+        this.roleIds = roleIds;
+        this.postIds = postIds;
+        this.roleId = roleId;
+        this.userType = userType;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public Long getUserId()

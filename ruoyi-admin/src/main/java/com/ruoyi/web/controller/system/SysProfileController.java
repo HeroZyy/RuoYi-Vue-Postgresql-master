@@ -5,7 +5,10 @@ import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.framework.web.domain.server.Sys;
 import com.ruoyi.framework.web.service.SysRegisterService;
+import com.ruoyi.system.domain.B2bChangeMsg;
+import com.ruoyi.system.domain.B2bMember;
 import com.ruoyi.system.mapper.SysUserMapper;
+import com.ruoyi.system.service.IB2bMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +52,10 @@ public class SysProfileController extends BaseController
 
     @Autowired
     private SysUserMapper userMapper;
+
+    @Autowired
+    private IB2bMemberService memberService;
+
     /**
      * 个人信息
      */
@@ -58,7 +65,11 @@ public class SysProfileController extends BaseController
         LoginUser loginUser = getLoginUser();
         SysUser user = loginUser.getUser();
         AjaxResult ajax = AjaxResult.success(user);
-        ajax.put("roleGroup", userService.selectUserRoleGroup(loginUser.getUsername()));
+        String s = userService.selectUserRoleGroup(loginUser.getUsername());
+        if(s.contains("认证会员")) s = "3";
+        else s = "4";
+        ajax.put("roleGroup", s);
+        ajax.put("profileMsg",memberService.selectB2bMemberBySid(loginUser.getUserId()));
 //        ajax.put("postGroup", userService.selectUserPostGroup(loginUser.getUsername()));
         return ajax;
     }
@@ -90,7 +101,7 @@ public class SysProfileController extends BaseController
         if(userService.checkPhoneUnique(user)){
             return error("手机号不存在");
         }
-        String resCode = userService.resPhoneCode(phonenumber);
+        String resCode = userService.resPhoneCode("修改密码提醒",phonenumber);
         ajax.put("CODE", resCode);
         return ajax;
     }
@@ -114,7 +125,6 @@ public class SysProfileController extends BaseController
         return error("修改密码异常，请联系管理员");
     }
 
-
     /**
      * 手机验证码重置密码 内部的
      */
@@ -122,8 +132,9 @@ public class SysProfileController extends BaseController
     @GetMapping("/codeUpdatePwd")
     public AjaxResult codeUpdatePwd(String phonenumber,String code)
     {
-        LoginUser loginUser = getLoginUser();
-        String userName = loginUser.getUsername();
+//        LoginUser loginUser = getLoginUser();
+        SysUser loginUser = userService.selectUserByUserName(phonenumber);
+        String userName = loginUser.getUserName();
         String password = loginUser.getPassword();
         String msg = sysRegisterService.vatifyPhoneCode(phonenumber,code);
         String newPassword = UserConstants.PASSWD;
@@ -133,8 +144,8 @@ public class SysProfileController extends BaseController
         if (userService.resetUserPwd(userName, SecurityUtils.encryptPassword(newPassword)) > 0)
         {
             // 更新缓存用户密码
-            loginUser.getUser().setPassword(SecurityUtils.encryptPassword(newPassword));
-            tokenService.setLoginUser(loginUser);
+            loginUser.setPassword(SecurityUtils.encryptPassword(newPassword));
+//            tokenService.setLoginUser(loginUser);
             return success();
         }
         return error("修改密码异常，请联系管理员");
@@ -145,25 +156,28 @@ public class SysProfileController extends BaseController
      */
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PostMapping("/updateMsg")
-    public AjaxResult updateMsg(@RequestBody SysUser user)
+    public AjaxResult updateMsg(@RequestBody B2bChangeMsg user)
     {
         LoginUser loginUser = getLoginUser();
         SysUser currentUser = loginUser.getUser();
 //        currentUser.setNickName(user.getNickName());
         currentUser.setEmail(user.getEmail());
-//        currentUser.setPhonenumber(user.getPhonenumber());
-        currentUser.setSex(user.getSex());
-        currentUser.setAvatar(user.getAvatar());
+        B2bMember currentMember = memberService.selectB2bMemberBySid(currentUser.getUserId());
+        currentMember.setCompany(user.getCompany());
+//        currentMember.setAddr(user.getAddr());
+        currentMember.setRealname(user.getRealname());
+        currentMember.setEmail(user.getEmail());
+        currentMember.setAvator(user.getAvatar());
 //        currentUser.setUserName(user.getUserName());
-        if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(currentUser))
-        {
-            return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
-        }
+//        if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(currentUser))
+//        {
+//            return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
+//        }
         if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(currentUser))
         {
             return error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
-        if (userService.updateUserProfile(currentUser) > 0)
+        if (userService.updateUserProfile(currentUser) > 0 && memberService.updateB2bMember(currentMember) > 0)
         {
             // 更新缓存用户信息
             tokenService.setLoginUser(loginUser);

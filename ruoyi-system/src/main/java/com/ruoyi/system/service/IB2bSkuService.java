@@ -7,10 +7,19 @@ import com.ruoyi.system.domain.B2bSku;
  * 产品单元Service接口
  * 
  * @author ruoyi
- * @date 2023-10-20
+ * @date 2023-10-26
  */
 public interface IB2bSkuService 
 {
+    /**
+     * 查询某产品id下的所有单元
+     *
+     * @param sid 产品单元主键
+     * @return 产品单元
+     */
+    public List<B2bSku> selectListB2bSkuBySid(Long sid);
+
+
     /**
      * 查询产品单元
      * 

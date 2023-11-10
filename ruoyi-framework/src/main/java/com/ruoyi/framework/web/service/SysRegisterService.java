@@ -1,7 +1,10 @@
 package com.ruoyi.framework.web.service;
 
+import com.ruoyi.common.utils.SendMsg;
+import com.ruoyi.system.domain.B2bMember;
 import com.ruoyi.system.mapper.SysUserMapper;
 //import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.ruoyi.system.service.IB2bMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.constant.CacheConstants;
@@ -22,8 +25,20 @@ import com.ruoyi.system.service.ISysUserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.PostMethod;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import static com.ruoyi.common.utils.SendMsg.Send;
 
 /**
  * 注册校验方法
@@ -44,6 +59,10 @@ public class SysRegisterService
 
     @Autowired
     private SysUserMapper userMapper;
+
+    @Autowired
+    private IB2bMemberService memberService;
+
 
     /**
      * 手机号是否被注册
@@ -67,7 +86,7 @@ public class SysRegisterService
         int randomInt = random.nextInt(10000);
         String result = String.format("%04d", randomInt);
         redisCache.setCacheObject(phonenumber,result,UserConstants.CODE_TIME_OUT, TimeUnit.MINUTES);
-
+        Send("注册提醒",phonenumber,Integer.parseInt(result));
         //要形成电话和验证码的映射，后续对比验证码和电话
         return result;
     }
@@ -106,7 +125,8 @@ public class SysRegisterService
         Long [] member = {4L};
         sysUser.setRoleIds(member);
         sysUser.setStatus("0");
-
+        //设置为普通会员
+        sysUser.setUserType("1");
         // 验证码开关
 //        boolean captchaEnabled = configService.selectCaptchaEnabled();
 //        if (captchaEnabled)
@@ -127,8 +147,7 @@ public class SysRegisterService
         {
             msg = "账户长度必须在2到20个字符之间";
         }
-        else if (password.length() < UserConstants.PASSWORD_MIN_LENGTH
-                || password.length() > UserConstants.PASSWORD_MAX_LENGTH)
+        else if (password.length() < UserConstants.PASSWORD_MIN_LENGTH || password.length() > UserConstants.PASSWORD_MAX_LENGTH)
         {
             msg = "密码长度必须在5到20个字符之间";
         }
@@ -146,18 +165,31 @@ public class SysRegisterService
         }
         else
         {
-            sysUser.setNickName(username);
-            sysUser.setPassword(SecurityUtils.encryptPassword(password));
-            boolean regFlag = userService.registerUser(sysUser);
+            try {
+                sysUser.setNickName(username);
+                sysUser.setPassword(SecurityUtils.encryptPassword(password));
+                boolean regFlag = userService.registerUser(sysUser);
+                userService.updateUser(sysUser);
+                // 插入会员表会员信息
+                B2bMember b2bMember = new B2bMember();
+                b2bMember.setSid(sysUser.getUserId());
+                b2bMember.setPhone(sysUser.getPhonenumber());
+                //默认设置为普通会员
+                b2bMember.setMemberType(1L);
+                b2bMember.setSex(1L);
+                memberService.insertB2bMember(b2bMember);
+                if (!regFlag)
+                {
+                    msg = "注册失败,请联系系统管理人员";
+                }
+                else
+                {
+                    AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.register.success")));
 
-            userService.updateUser(sysUser);
-            if (!regFlag)
-            {
-                msg = "注册失败,请联系系统管理人员";
+                }
             }
-            else
-            {
-                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.register.success")));
+            catch (Exception e){
+                msg = "注册失败,请联系系统管理人员";
             }
         }
         return msg;

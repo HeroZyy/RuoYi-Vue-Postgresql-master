@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -84,6 +85,9 @@ import com.ruoyi.common.utils.file.FileTypeUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.common.utils.file.ImageUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
+import org.springframework.http.MediaType;
+
+import static com.ruoyi.common.utils.file.FileUtils.deleteFile;
 
 /**
  * Excel相关处理
@@ -510,6 +514,55 @@ public class ExcelUtil<T>
         return exportExcel(list, sheetName, StringUtils.EMPTY);
     }
 
+    public  String getPath(List<T> list,String sheetName){
+        this.init(list, sheetName, title, Type.EXPORT);
+        OutputStream out = null;
+        try
+        {
+            writeSheet();
+            String filename = encodingFilename(sheetName);
+            out = new FileOutputStream(getAbsoluteFile(filename));
+            wb.write(out);
+            return filename;
+        }
+        catch (Exception e)
+        {
+            log.error("导出Excel异常{}", e.getMessage());
+            throw new UtilException("导出Excel失败，请联系网站管理员！");
+        }
+        finally
+        {
+            IOUtils.closeQuietly(wb);
+            IOUtils.closeQuietly(out);
+        }
+    }
+    public static void download(String filePath, Boolean delete, HttpServletResponse response)
+    {
+        //重新设置文件名 年月日时分秒_表格名称
+        String responseFileName = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now())+"_"+filePath.substring(filePath.length()-9);
+        try
+        {
+            File file = new File(filePath);
+            //判断文件是否存在
+            if (file.exists()) {
+                //让浏览器认识
+                response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+                response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+                //返回相应流以及文件名
+                FileUtils.setAttachmentResponseHeader(response, responseFileName);
+                //获取文件并输出流
+                FileUtils.writeBytes(filePath, response.getOutputStream());
+                //输出完毕后删除服务器端文件
+                if (delete){
+                    deleteFile(filePath);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("下载文件失败", e);
+        }
+    }
     /**
      * 对list数据源将其里面的数据导入到excel表单
      * 

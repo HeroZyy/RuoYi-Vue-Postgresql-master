@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.B2bSceneMapper">
+    
+    <resultMap type="B2bScene" id="B2bSceneResult">
+        <result property="sid"    column="sid"    />
+        <result property="name"    column="name"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="parentId"    column="parent_id"    />
+    </resultMap>
+
+    <sql id="selectB2bSceneVo">
+        select sid, name, order_id, parent_id from b2b_scene
+    </sql>
+
+    <select id="selectB2bSceneList" parameterType="B2bScene" resultMap="B2bSceneResult">
+        <include refid="selectB2bSceneVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+        </where>
+        ORDER BY order_id
+    </select>
+    
+    <select id="selectB2bSceneBySid" parameterType="Long" resultMap="B2bSceneResult">
+        <include refid="selectB2bSceneVo"/>
+        where sid = #{sid}
+        ORDER BY order_id
+    </select>
+        
+    <insert id="insertB2bScene" parameterType="B2bScene">
+        insert into b2b_scene
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">sid,</if>
+            <if test="name != null">name,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="parentId != null">parent_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">#{sid},</if>
+            <if test="name != null">#{name},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="parentId != null">#{parentId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateB2bScene" parameterType="B2bScene">
+        update b2b_scene
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteB2bSceneBySid" parameterType="Long">
+        delete from b2b_scene where sid = #{sid}
+    </delete>
+
+    <delete id="deleteB2bSceneBySids" parameterType="String">
+        delete from b2b_scene where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+</mapper>

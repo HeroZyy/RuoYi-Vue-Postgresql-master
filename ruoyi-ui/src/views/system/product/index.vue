@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="产品id" prop="sid">
-        <el-input
-          v-model="queryParams.sid"
-          placeholder="请输入产品id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="产品分类id" prop="classId">
         <el-input
           v-model="queryParams.classId"
@@ -140,9 +132,6 @@
     <!-- 添加或修改产品基本信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="产品id" prop="sid">
-          <el-input v-model="form.sid" placeholder="请输入产品id" />
-        </el-form-item>
         <el-form-item label="产品分类id" prop="classId">
           <el-input v-model="form.classId" placeholder="请输入产品分类id" />
         </el-form-item>
@@ -196,7 +185,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        sid: null,
         classId: null,
         shopId: null,
         prodName: null,
@@ -207,9 +195,6 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        sid: [
-          { required: true, message: "产品id不能为空", trigger: "blur" }
-        ],
         classId: [
           { required: true, message: "产品分类id不能为空", trigger: "blur" }
         ],
